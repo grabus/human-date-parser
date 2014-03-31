@@ -1,4 +1,4 @@
-# HumanDateParser.js [![Build Status](https://secure.travis-ci.org/grabus/human-date-parser.png?branch=master)](http://travis-ci.org/grabus/human-date-parser)
+# HumanDateParser.js [![Build Status](https://travis-ci.org/grabus/human-date-parser.svg?branch=master)](https://travis-ci.org/grabus/human-date-parser)
 
 HumanDateParser is an multi language date parser for the browser. For examples and demos, see: [http://grabus.github.io/human-date-parser/](http://grabus.github.io/human-date-parser/) (soon...)
 
