@@ -475,9 +475,8 @@ if (typeof require != 'undefined') {
     var ParserRegulars = require('./parser-regulars')
 }
 
-// todo: make build system with grunt
 // todo: fix or remove docs
-
+// todo: clean global scope
 
 /**
  * Initialize `HumanDateParser`
