@@ -1,17 +1,4 @@
-/**
- * if node
- */
-
-if (typeof module !== 'undefined')
-    module.exports = HumanDateParser
-
-if (typeof require != 'undefined') {
-    var ParserDate = require('./parser-date')
-    var ParserRegulars = require('./parser-regulars')
-}
-
-// todo: fix or remove docs
-// todo: clean global scope
+module.exports = HumanDateParser
 
 /**
  * Initialize `HumanDateParser`

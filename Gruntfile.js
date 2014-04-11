@@ -5,13 +5,16 @@ module.exports = function(grunt) {
                 src: ['build/*']
             }
         },
-        concat: {
-            js: {
+        browserify: {
+            dist: {
                 files: {
                     'build/parser.js': [
-                        'parser-date.js',
-                        'parser-regulars.js',
                         'human-date-parser.js'
+                    ]
+                },
+                options: {
+                    alias: [
+                        'human-date-parser.js:HumanDateParser'
                     ]
                 }
             }
@@ -33,9 +36,12 @@ module.exports = function(grunt) {
     })
 
     grunt.loadNpmTasks('grunt-contrib-clean')
-    grunt.loadNpmTasks('grunt-contrib-concat')
     grunt.loadNpmTasks('grunt-contrib-uglify')
     grunt.loadNpmTasks('grunt-mocha-test')
+    grunt.loadNpmTasks('grunt-browserify')
 
-    grunt.registerTask('default', ['clean:js', 'concat:js', 'uglify'])
+    //grunt.registerTask('default', ['clean:js', 'concat:js', 'uglify'])
+    grunt.registerTask('build', ['clean:js', 'browserify:dist'])
+    grunt.registerTask('build-min', ['build', 'uglify'])
+    grunt.registerTask('test', ['mochaTest'])
 }

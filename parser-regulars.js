@@ -1,10 +1,4 @@
-/**
- * if node
- */
-
-if (typeof module !== 'undefined')
-    module.exports = ParserRegulars
-
+module.exports = ParserRegulars
 
 function ParserRegulars (lang) {
     var obj = ParserRegularsLocales[lang] || ParserRegularsLocales['en']

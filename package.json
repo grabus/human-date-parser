@@ -2,13 +2,14 @@
   "name": "HumanDateParser",
   "version": "0.0.1",
   "description": "human date parser",
-  "main": "index.js",
+  "main": "human-date-parser.js",
   "devDependencies": {
     "better-assert": "~1.0.0",
     "grunt-contrib-clean": "0.5.0",
-    "grunt-contrib-concat": "0.3.0",
     "grunt-contrib-uglify": "0.2.7",
-    "grunt-mocha-test": "~0.10.0"
+    "grunt-mocha-test": "~0.10.0",
+    "browserify": "~3.40.0",
+    "grunt-browserify": "~2.0.3"
   },
   "scripts": {
     "test": "grunt mochaTest"
