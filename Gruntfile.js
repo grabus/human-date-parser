@@ -40,7 +40,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-mocha-test')
     grunt.loadNpmTasks('grunt-browserify')
 
-    //grunt.registerTask('default', ['clean:js', 'concat:js', 'uglify'])
+    grunt.registerTask('default', ['build-min'])
     grunt.registerTask('build', ['clean:js', 'browserify:dist'])
     grunt.registerTask('build-min', ['build', 'uglify'])
     grunt.registerTask('test', ['mochaTest'])
