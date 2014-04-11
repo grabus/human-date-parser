@@ -8,25 +8,35 @@ module.exports = HumanDateParser
  * @api public
  */
 
-function HumanDateParser (str, offset, lang) {
-    if (!(this instanceof HumanDateParser)) return new HumanDateParser(str, offset, lang)
+var ParserDate = require('./parser-date'),
+    ParserRegulars = require('./parser-regulars')
+
+function HumanDateParser (offset, lang) {
+    if (!(this instanceof HumanDateParser)) return new HumanDateParser(offset, lang)
     this.r = new ParserRegulars(lang)
-    if (typeof offset == 'string') offset = new HumanDateParser(offset, null, lang).parse()
+    if (typeof offset == 'string') offset = new HumanDateParser(null, lang).parse(offset)
     this.d = offset || new Date
     this.date = new ParserDate(this.d)
-    this.original = str
-    this.str = str.toLowerCase()
-    this.stash = []
-    this.tokens = []
 }
 
 HumanDateParser.prototype = {
-    parse: function () {
-        while (this.advance() !== 'eos');
+    clear: function () {
+        this.index = 0
+        this.stash = []
+        this.tokens = []
+        this.marks = []
+    },
+
+    parse: function (str) {
+        this.original = str
+        this.str = this.original.toLowerCase()
+
+        this.clear()
+        while (this.advance() !== 'eos'){}
         this.nextTime(this.d)
         if (this.date.date == this.d) throw new Error('Invalid date')
         var foundDate = !this.tokens.every(function (token) {
-            return token == 'other' || token == 'eos'
+            return token == 'other' || token == 'eos' || token == 'string'
         })
         if (!foundDate) return false
         return this.date.date
