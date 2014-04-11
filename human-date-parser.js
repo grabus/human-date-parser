@@ -346,7 +346,6 @@ HumanDateParser.prototype = {
 
     time: function (h, m, s, meridiem) {
         var d = this.date
-        var before = d.clone()
 
         if (meridiem) {
             // convert to 24 hour
@@ -411,7 +410,6 @@ HumanDateParser.prototype = {
         var captures
         if (captures = this.r.noon.exec(this.str)) {
             this.skip(captures, 'noon')
-            var before = this.date.clone()
             this.date.date.setHours(12, 0, 0)
             return 'noon'
         }
@@ -425,7 +423,6 @@ HumanDateParser.prototype = {
         var captures
         if (captures = this.r.midnight.exec(this.str)) {
             this.skip(captures, 'midnight')
-            var before = this.date.clone()
             this.date.date.setHours(0, 0, 0)
             return 'midnight'
         }
@@ -441,7 +438,6 @@ HumanDateParser.prototype = {
         if (captures = this.r.night.exec(this.str)) {
             this.skip(captures, 'night')
             this._meridiem = 'pm'
-            var before = this.date.clone()
             this.date.date.setHours(19, 0, 0)
             return 'night'
         }
@@ -456,7 +452,6 @@ HumanDateParser.prototype = {
         if (captures = this.r.evening.exec(this.str)) {
             this.skip(captures, 'evening')
             this._meridiem = 'pm'
-            var before = this.date.clone()
             this.date.date.setHours(17, 0, 0)
             return 'evening'
         }
@@ -471,7 +466,6 @@ HumanDateParser.prototype = {
         if (captures = this.r.afternoon.exec(this.str)) {
             this.skip(captures, 'afternoon')
             this._meridiem = 'pm'
-            var before = this.date.clone()
 
             if (this.date.changed('hours'))
                 return 'afternoon'
@@ -491,7 +485,6 @@ HumanDateParser.prototype = {
         if (captures = this.r.morning.exec(this.str)) {
             this.skip(captures, 'morning')
             this._meridiem = 'am'
-            var before = this.date.clone()
             if (!this.date.changed('hours')) this.date.date.setHours(8, 0, 0)
             return 'morning'
         }
