@@ -132,12 +132,23 @@ HumanDateParser.prototype = {
     /**
      * Consume the given `len`.
      *
-     * @param {Number|Array} len
+     * @param {Number|Array} captures
+     * @param {String} key
      * @api private
      */
 
-    skip: function (len) {
-        this.str = this.str.substr(Array.isArray(len) ? len[0].length : len)
+    skip: function (captures, key) {
+        this.str = this.str.substr(captures[0].length)
+
+        if (key != 'other' && key != 'space')
+            this.marks.push({
+                key: key,
+                value: captures[0],
+                index: this.index,
+                length: captures[0].length
+            })
+
+        this.index += captures[0].length
     },
 
     /**
@@ -156,7 +167,7 @@ HumanDateParser.prototype = {
     space: function () {
         var captures
         if (captures = this.r.space.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'space')
             return this.advance()
         }
     },
@@ -168,7 +179,7 @@ HumanDateParser.prototype = {
     second: function () {
         var captures
         if (captures = this.r.second.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'second')
             return 'second'
         }
     },
@@ -180,7 +191,7 @@ HumanDateParser.prototype = {
     minute: function () {
         var captures
         if (captures = this.r.minute.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'minute')
             return 'minute'
         }
     },
@@ -192,7 +203,7 @@ HumanDateParser.prototype = {
     hour: function () {
         var captures
         if (captures = this.r.hour.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'hour')
             return 'hour'
         }
     },
@@ -204,7 +215,7 @@ HumanDateParser.prototype = {
     day: function () {
         var captures
         if (captures = this.r.day.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'day')
             return 'day'
         }
     },
@@ -219,7 +230,7 @@ HumanDateParser.prototype = {
             var re = new RegExp('^' + item.r)
             if (captures = re.exec(this.str)) {
                 var day = item.name
-                this.skip(captures)
+                this.skip(captures, 'dayByName')
                 this.date[day](1)
                 return day
             }
@@ -237,7 +248,7 @@ HumanDateParser.prototype = {
             var month = captures[2]
             this.date.date.setMonth((this.months.indexOf(month)))
             if (day) this.date.date.setDate(parseInt(day) - 1)
-            this.skip(captures)
+            this.skip(captures, 'monthByName')
             return captures[0]
         }
     },
@@ -248,7 +259,7 @@ HumanDateParser.prototype = {
             var num = captures[1]
             var mod = captures[2]
             this.date[mod](-num)
-            this.skip(captures)
+            this.skip(captures, 'timeAgo')
             return 'timeAgo'
         }
     },
@@ -260,7 +271,7 @@ HumanDateParser.prototype = {
     week: function () {
         var captures
         if (captures = this.r.week.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'week')
             return 'week'
         }
     },
@@ -272,7 +283,7 @@ HumanDateParser.prototype = {
     month: function () {
         var captures
         if (captures = this.r.month.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'month')
             return 'month'
         }
     },
@@ -284,7 +295,7 @@ HumanDateParser.prototype = {
     year: function () {
         var captures
         if (captures = this.r.year.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'year')
             return 'year'
         }
     },
@@ -296,7 +307,7 @@ HumanDateParser.prototype = {
     meridiem: function () {
         var captures
         if (captures = this.r.meridiem.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'meridiem')
             this.time(captures[1], captures[3], captures[5], captures[6])
             return 'meridiem'
         }
@@ -309,7 +320,7 @@ HumanDateParser.prototype = {
     hourminute: function () {
         var captures
         if (captures = this.r.hourMinute.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'hourminute')
             this.time(captures[1], captures[3], captures[5])
             return 'hourminute'
         }
@@ -322,7 +333,7 @@ HumanDateParser.prototype = {
     athour: function () {
         var captures
         if (captures = this.r.atHour.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'athour')
             this.time(captures[1], 0, 0, this._meridiem)
             this._meridiem = null
             return 'athour'
@@ -373,7 +384,7 @@ HumanDateParser.prototype = {
     yesterday: function () {
         var captures
         if (captures = this.r.yesterday.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'yesterday')
             this.date.day(-1)
             return 'yesterday'
         }
@@ -386,7 +397,7 @@ HumanDateParser.prototype = {
     tomorrow: function () {
         var captures
         if (captures = this.r.tomorrow.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'tomorrow')
             this.date.day(1)
             return 'tomorrow'
         }
@@ -399,7 +410,7 @@ HumanDateParser.prototype = {
     noon: function () {
         var captures
         if (captures = this.r.noon.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'noon')
             var before = this.date.clone()
             this.date.date.setHours(12, 0, 0)
             return 'noon'
@@ -413,7 +424,7 @@ HumanDateParser.prototype = {
     midnight: function () {
         var captures
         if (captures = this.r.midnight.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'midnight')
             var before = this.date.clone()
             this.date.date.setHours(0, 0, 0)
             return 'midnight'
@@ -428,7 +439,7 @@ HumanDateParser.prototype = {
     night: function () {
         var captures
         if (captures = this.r.night.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'night')
             this._meridiem = 'pm'
             var before = this.date.clone()
             this.date.date.setHours(19, 0, 0)
@@ -443,7 +454,7 @@ HumanDateParser.prototype = {
     evening: function () {
         var captures
         if (captures = this.r.evening.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'evening')
             this._meridiem = 'pm'
             var before = this.date.clone()
             this.date.date.setHours(17, 0, 0)
@@ -458,7 +469,7 @@ HumanDateParser.prototype = {
     afternoon: function () {
         var captures
         if (captures = this.r.afternoon.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'afternoon')
             this._meridiem = 'pm'
             var before = this.date.clone()
 
@@ -478,7 +489,7 @@ HumanDateParser.prototype = {
     morning: function () {
         var captures
         if (captures = this.r.morning.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'morning')
             this._meridiem = 'am'
             var before = this.date.clone()
             if (!this.date.changed('hours')) this.date.date.setHours(8, 0, 0)
@@ -493,7 +504,7 @@ HumanDateParser.prototype = {
     tonight: function () {
         var captures
         if (captures = this.r.tonight.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'tonight')
             this._meridiem = 'pm'
             return 'tonight'
         }
@@ -506,7 +517,7 @@ HumanDateParser.prototype = {
     _next: function () {
         var captures
         if (captures = this.r.next.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'next')
             var d = new Date(this.date.date)
             var mod = this.peek()
 
@@ -531,7 +542,7 @@ HumanDateParser.prototype = {
     last: function () {
         var captures
         if (captures = this.r.last.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'last')
             var d = new Date(this.date.date)
             var mod = this.peek()
 
@@ -556,7 +567,7 @@ HumanDateParser.prototype = {
     ago: function () {
         var captures
         if (captures = this.r.ago.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'ago')
             return 'ago'
         }
     },
@@ -569,7 +580,7 @@ HumanDateParser.prototype = {
         var captures
         if (captures = this.r.number.exec(this.str)) {
             var n = captures[1]
-            this.skip(captures)
+            this.skip(captures, 'number')
             var mod = this.peek()
 
             // If we have a defined modifier, then update
@@ -596,7 +607,7 @@ HumanDateParser.prototype = {
     string: function () {
         var captures
         if (captures = this.r.string.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'string')
             return 'string'
         }
     },
@@ -608,7 +619,7 @@ HumanDateParser.prototype = {
     other: function () {
         var captures
         if (captures = this.r.other.exec(this.str)) {
-            this.skip(captures)
+            this.skip(captures, 'other')
             return 'other'
         }
     }
