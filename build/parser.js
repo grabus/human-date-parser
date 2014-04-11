@@ -17,11 +17,11 @@ function HumanDateParser (offset, lang) {
     this.r = new ParserRegulars(lang)
     if (typeof offset == 'string') offset = new HumanDateParser(null, lang).parse(offset)
     this.d = offset || new Date
-    this.date = new ParserDate(this.d)
 }
 
 HumanDateParser.prototype = {
     clear: function () {
+        this.date = new ParserDate(this.d)
         this.index = 0
         this.stash = []
         this.tokens = []
