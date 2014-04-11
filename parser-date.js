@@ -9,8 +9,8 @@ var _minute = 60 * _second
 var _hour = 60 * _minute
 var _day = 24 * _hour
 var _week = 7 * _day
-var _year = 56 * _week
-var _daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+//var _year = 56 * _week
+//var _daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 /**
  * Initialize `ParserDate`
@@ -139,10 +139,11 @@ ParserDate.prototype = {
 
     /**
      * get the days in the month
+     * todo: check it!
      */
 
     daysInMonth: function (m) {
-        var dim = _daysInMonth[m]
+        //var dim = _daysInMonth[m]
         var leap = leapyear(this.date.getFullYear())
         return (1 == m && leap) ? 29 : 28
     },
@@ -169,9 +170,11 @@ ParserDate.prototype = {
      * @param {Number} m
      * @param {Number} s
      * @return {ParserDate}
+     *
+     * todo: meridiem?
      */
 
-    time: function (h, m, s, meridiem) {
+    time: function (h, m, s/*, meridiem*/) {
         if (h === false) {
             h = this.date.getHours()
         } else {
@@ -234,7 +237,7 @@ ParserDate.prototype = {
 
 var days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 days.forEach(function (day, i) {
-    ParserDate.prototype[days[i]] = function (n) {
+    ParserDate['prototype'][days[i]] = function (n) {
         this._changed['days'] = true
         this.updateDay(i, n)
     }
