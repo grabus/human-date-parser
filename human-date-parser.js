@@ -99,7 +99,7 @@ HumanDateParser.prototype = {
     /**
      * Lookahead a single token.
      *
-     * @return {Token}
+     * @return {Object} token
      * @api private
      */
 
@@ -110,7 +110,7 @@ HumanDateParser.prototype = {
     /**
      * Fetch next token including those stashed by peek.
      *
-     * @return {Token}
+     * @return {Object} token
      * @api private
      */
 
@@ -121,7 +121,7 @@ HumanDateParser.prototype = {
     /**
      * Return the next possibly stashed token.
      *
-     * @return {Token}
+     * @return {Object} token
      * @api private
      */
 

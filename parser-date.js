@@ -165,9 +165,9 @@ ParserDate.prototype = {
     /**
      * Set the time
      *
-     * @param {String} h
-     * @param {String} m
-     * @param {String} s
+     * @param {Number} h
+     * @param {Number} m
+     * @param {Number} s
      * @return {ParserDate}
      */
 

@@ -674,7 +674,7 @@ describe('months (fixes: #10)', function (){
 });
 
 /**
- * Suppport 'ago' modifier
+ * Support 'ago' modifier
  */
 
 describe('support "ago" modifier (fixes: #20)', function (){

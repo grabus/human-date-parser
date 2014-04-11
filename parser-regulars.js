@@ -2,8 +2,9 @@ module.exports = ParserRegulars
 
 function ParserRegulars (lang) {
     var obj = ParserRegularsLocales[lang] || ParserRegularsLocales['en']
-    for(var prop in obj)
-        this[prop] = obj[prop]
+    for (var prop in obj)
+        if (obj.hasOwnProperty(prop))
+            this[prop] = obj[prop]
 }
 
 ParserRegulars.prototype = {
