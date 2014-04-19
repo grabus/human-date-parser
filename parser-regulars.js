@@ -42,11 +42,12 @@ ParserRegulars.prototype = {
 var ParserRegularsLocales = {
     // we use /(?:^|\s)( ... )(?=\s|$)/ instead of /b because unicode
     // http://stackoverflow.com/questions/2881445/utf-8-word-boundary-regex-in-javascript
+    // we use /^[а-яА-Я0-9_]+/ instead of \w the same cause
     ru: {
         at:         'в',
         space:      /^([ \t]+)/,
         number:     /^(\d+)/,
-        string:     /^\w+/,
+        string:     /^[а-яА-Я0-9_]+/,
         other:      /^./,
         second:     /^сек(унд(а|ы|у)?)/,
         minute:     /^мин(ут(а|у)?)?/,
@@ -60,7 +61,7 @@ var ParserRegularsLocales = {
         noon:       /^полдень(?=\s|$)/,
         midnight:   /^полночь(?=\s|$)/,
         night:      /^ночь(ю)?(?=\s|$)/,
-        evening:    /^вечер(ом)?(?=\s|$)/,
+        evening:    /^вечер(ом|а)?(?=\s|$)/,
         afternoon:  /^днем(?=\s|$)/,
         morning:    /^утр(о|а|ом)(?=\s|$)/,
         tonight:    /^сегодня\sвечером(?=\s|$)/,
@@ -69,9 +70,9 @@ var ParserRegularsLocales = {
         ago:        /^назад(?=\s|$)/,
 
         // 5, 05, 5:30, 5.30, 05:30:10, 05:30.10, 05.30.10, в 5
-        meridiem:   /^(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
-        hourMinute: /^(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
-        atHour:     /^в\s?(\d{1,2})$/,
+        meridiem:   /^в?\s?(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
+        hourMinute: /^в?\s?(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
+        atHour:     /^в\s?(\d{1,2})\s?(час(ов|а)?)?/,
 
         past: [
             { name: 'last',      r: /(?:^|\s)(прошл(ый|ое|ая|ой|ым))(?=\s|$)/ },
@@ -151,9 +152,9 @@ var ParserRegularsLocales = {
         ago:        /^ago\b/,
 
         // 5, 05, 5:30, 5.30, 05:30:10, 05:30.10, 05.30.10, at 5
-        meridiem:   /^(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
-        hourMinute: /^(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
-        atHour:     /^at\s?(\d{1,2})$/,
+        meridiem:   /^(?:at)?\s?(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
+        hourMinute: /^(?:at)?\s?(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
+        atHour:     /^at\s?(\d{1,2})/,
 
         past: [
             { name: 'last',      r: /\b(last)\b/      },
