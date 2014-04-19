@@ -59,7 +59,7 @@ Language can be `en` or `ru`, feel free to add new languages.
 To run the tests, you'll need node.js:
 
     npm install
-    grunt
+    npm test
 
 
 ## License
