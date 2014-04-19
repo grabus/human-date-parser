@@ -25,6 +25,7 @@ HumanDateParser.prototype = {
         this.stash = []
         this.tokens = []
         this.marks = []
+        this._meridiem = null
     },
 
     parse: function (str) {
@@ -462,7 +463,11 @@ HumanDateParser.prototype = {
         if (captures = this.r.evening.exec(this.str)) {
             this.skip(captures, 'evening')
             this._meridiem = 'pm'
-            this.date.date.setHours(17, 0, 0)
+            if (!this.date.changed('hours'))
+                this.date.date.setHours(17, 0, 0)
+            else {
+                this.time(this.date.date.getHours(), 0, 0, this._meridiem)
+            }
             return 'evening'
         }
     },
