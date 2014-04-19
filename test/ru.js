@@ -58,7 +58,7 @@ describe('минуты', function () {
 describe('часы', function() {
   it('в 5 часов', function () {
     var date = HumanDateParser(mon, 'ru').parse('в 5 часов');
-    assert('6:30:00' == t(date));
+    assert('5:00:00' == t(date));
     assert('5/13/13' == d(date));
   });
 

@@ -63,13 +63,13 @@ describe('hours', function() {
   });
 
   it('at 5am', function () {
-    var date = HumanDateParser(mon, 'en').parse('5am');
+    var date = HumanDateParser(mon, 'en').parse('at 5am');
     assert('5:00:00' == t(date));
     assert('5/13/13' == d(date));
   });
 
   it('at 5pm', function () {
-    var date = HumanDateParser(mon, 'en').parse('5pm');
+    var date = HumanDateParser(mon, 'en').parse('at 5pm');
     assert('17:00:00' == t(date));
     assert('5/13/13' == d(date));
   });
