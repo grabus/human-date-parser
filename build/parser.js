@@ -26,6 +26,7 @@ HumanDateParser.prototype = {
         this.stash = []
         this.tokens = []
         this.marks = []
+        this._meridiem = null
     },
 
     parse: function (str) {
@@ -463,7 +464,11 @@ HumanDateParser.prototype = {
         if (captures = this.r.evening.exec(this.str)) {
             this.skip(captures, 'evening')
             this._meridiem = 'pm'
-            this.date.date.setHours(17, 0, 0)
+            if (!this.date.changed('hours'))
+                this.date.date.setHours(17, 0, 0)
+            else {
+                this.time(this.date.date.getHours(), 0, 0, this._meridiem)
+            }
             return 'evening'
         }
     },
@@ -933,11 +938,12 @@ ParserRegulars.prototype = {
 var ParserRegularsLocales = {
     // we use /(?:^|\s)( ... )(?=\s|$)/ instead of /b because unicode
     // http://stackoverflow.com/questions/2881445/utf-8-word-boundary-regex-in-javascript
+    // we use /^[а-яА-Я0-9_]+/ instead of \w the same cause
     ru: {
         at:         'в',
         space:      /^([ \t]+)/,
         number:     /^(\d+)/,
-        string:     /^\w+/,
+        string:     /^[а-яА-Я0-9_]+/,
         other:      /^./,
         second:     /^сек(унд(а|ы|у)?)/,
         minute:     /^мин(ут(а|у)?)?/,
@@ -947,7 +953,7 @@ var ParserRegularsLocales = {
         month:      /^месяц(ев|а)?(?=\s|$)/,
         year:       /^(г(од(а|у|ами)?)?|лет)/,
         yesterday:  /^вчера/,
-        tomorrow:   /^завтра/, // todo: 'завт' определяет как 'завтра', поправить. вт - вторник
+        tomorrow:   /^завтра/,
         noon:       /^полдень(?=\s|$)/,
         midnight:   /^полночь(?=\s|$)/,
         night:      /^ночь(ю)?(?=\s|$)/,
@@ -960,9 +966,9 @@ var ParserRegularsLocales = {
         ago:        /^назад(?=\s|$)/,
 
         // 5, 05, 5:30, 5.30, 05:30:10, 05:30.10, 05.30.10, в 5
-        meridiem:   /^(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
-        hourMinute: /^(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
-        atHour:     /^в\s?(\d{1,2})$/,
+        meridiem:   /^в?\s?(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
+        hourMinute: /^в?\s?(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
+        atHour:     /^в\s?(\d{1,2})\s?(час(ов|а)?)?/,
 
         past: [
             { name: 'last',      r: /(?:^|\s)(прошл(ый|ое|ая|ой|ым))(?=\s|$)/ },
@@ -1042,9 +1048,9 @@ var ParserRegularsLocales = {
         ago:        /^ago\b/,
 
         // 5, 05, 5:30, 5.30, 05:30:10, 05:30.10, 05.30.10, at 5
-        meridiem:   /^(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
-        hourMinute: /^(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
-        atHour:     /^at\s?(\d{1,2})$/,
+        meridiem:   /^(?:at)?\s?(\d{1,2})([:.](\d{1,2}))?([:.](\d{1,2}))?\s*([ap]m)/,
+        hourMinute: /^(?:at)?\s?(\d{1,2})([:.](\d{1,2}))([:.](\d{1,2}))?/,
+        atHour:     /^at\s?(\d{1,2})/,
 
         past: [
             { name: 'last',      r: /\b(last)\b/      },
